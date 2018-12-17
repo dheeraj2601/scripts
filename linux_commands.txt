@@ -1,0 +1,8 @@
+
+locate only the given string
+locate abcd | grep abcd$
+
+
+chmod -R 755 dir_name
+
+
