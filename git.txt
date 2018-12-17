@@ -1,0 +1,3 @@
+
+
+git checkout -- filename => undo the changes done but not committed .
