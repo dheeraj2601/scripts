@@ -1,0 +1,13 @@
+" source /home/vim_script.vim
+set expandtab
+set tabstop=2 shiftwidth=2 softtabstop=2
+set filetype=c
+filetype indent on
+set autoindent
+set smartindent
+set cindent 
+set textwidth=80
+set cino=>2s,^-2,{1s,n-2,e2s,t0
+cscope add cscope.out
+" Highlight leading space, ||, &&,no-space before ( and after comma no space, more than 80 chars, tabs
+match Error /\(\(\s\|&\||\)\+$\)\|\(\%81v.\+\)\|\(\w(\|,\S\|\w|\||\w\|\w&\|&&\S\|\w=\|=\w\|\S!=\|!=\S\|\t\)/
