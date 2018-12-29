@@ -33,3 +33,30 @@ copy from line1 to line2 and paste in a new file
 :se nonu
 
 
+select all lines
+----------------
+ggVG
+
+
+vim xml
+--------
+
+copy below to ~/.vimrc
+
+augroup XML
+    autocmd!
+    autocmd FileType xml setlocal foldmethod=indent foldlevelstart=999 foldminlines=0
+augroup END
+
+
+zc close a fold (if the cursor is in an open fold), 
+zo will open a fold (if the cursor is in a closed fold). 
+za which will toggle the current fold 
+
+The commands zc (close), zo (open), and za (toggle) operate on one level of folding, at the cursor. 
+The commands zC, zO and zA are similar, but operate on all folding levels 
+
+
+
+
+
