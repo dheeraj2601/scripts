@@ -1,0 +1,175 @@
+init
+=====
+
+ifconfig virbr0 down
+
+ifconfig eth0 up
+
+brctl addbr veth0
+brctl addif veth0 eth0
+brctl stp veth0 off
+
+ifconfig veth0 down
+ifconfig veth0 hw ether d4:be:d9:d8:30:f0
+ifconfig veth0 up
+ifconfig veth0 192.168.12.224 netmask 255.255.254.0 up
+route add default gw 192.168.12.1
+
+
+hubs
+=====
+
+#!/bin/sh
+
+ip tuntap add name e1 mode tap
+ip tuntap add name e2 mode tap
+ip tuntap add name e3 mode tap
+
+
+#For vpc1
+brctl addbr vpc1_eth1_br
+brctl stp vpc1_eth1_br off
+ifconfig vpc1_eth1_br up
+ip tuntap add name 1e1 mode tap
+brctl addif vpc1_eth1_br 1e1
+
+brctl addbr vpc1_eth2_br
+brctl stp vpc1_eth2_br off
+ifconfig vpc1_eth2_br up
+ip tuntap add name 1e2 mode tap
+brctl addif vpc1_eth2_br 1e2
+
+
+
+#For vpc2
+brctl addbr vpc2_eth1_br
+brctl stp vpc2_eth1_br off
+ifconfig vpc2_eth1_br up
+ip tuntap add name 2e1 mode tap
+brctl addif vpc2_eth1_br 2e1
+
+brctl addbr vpc2_eth2_br
+brctl stp vpc2_eth2_br off
+ifconfig vpc2_eth2_br up
+ip tuntap add name 2e2 mode tap
+brctl addif vpc2_eth2_br 2e2
+
+
+restore_connection
+===================
+
+
+ifconfig veth1 down
+ifconfig veth2 down
+ifconfig veth3 down
+
+#For vpc1
+ifconfig vpc1_eth1_br down
+ifconfig vpc1_eth2_br down
+
+
+#For vpc2
+ifconfig vpc2_eth1_br down
+ifconfig vpc2_eth2_br down
+
+
+brctl delbr veth1
+brctl delbr veth2
+
+#For vpc1
+brctl delbr vpc1_eth1_br
+brctl delbr vpc1_eth2_br
+
+
+#For vpc2
+brctl delbr vpc2_eth1_br
+brctl delbr vpc2_eth2_br
+
+
+#Briding Physical Interfaces
+
+brctl addbr veth1
+brctl stp veth1 off
+ifconfig veth1 up
+brctl addif veth1 e1 eth2:1
+
+brctl addbr veth2
+brctl stp veth2 off
+ifconfig veth2 up
+brctl addif veth2 e2 eth2:2
+
+
+#Bridges for VPC1
+brctl addbr vpc1_eth1_br
+brctl stp vpc1_eth1_br off
+ifconfig vpc1_eth1_br up
+brctl addif vpc1_eth1_br 1e1 vpc1_eth1
+
+brctl addbr vpc1_eth2_br
+brctl stp vpc1_eth2_br off
+ifconfig vpc1_eth2_br up
+brctl addif vpc1_eth2_br 1e2 vpc1_eth2
+
+#Bridges for VPC2
+brctl addbr vpc2_eth1_br
+brctl stp vpc2_eth1_br off
+ifconfig vpc2_eth1_br up
+brctl addif vpc2_eth1_br 2e1 vpc2_eth1
+
+brctl addbr vpc2_eth2_br
+brctl stp vpc2_eth2_br off
+ifconfig vpc2_eth2_br up
+brctl addif vpc2_eth2_br 2e2 vpc2_eth2
+
+
+connect
+--------
+./connect vpc1_eth1 vpc2_eth1
+
+
+for {set i 1} {$i < $argc} {set i [expr {$i + 2}]} {
+
+ exec brctl delif [lindex $argv $i]_br [lindex $argv $i]
+ exec brctl addif [lindex $argv [expr $i -1] ]_br [lindex $argv $i]
+
+}
+
+
+disconnect
+-----------
+
+#./disconnect vpc1_eth1 vpc2_eth1
+brctl delif $1_br $1
+brctl delif $1_br $2
+brctl delif $2_br $1
+brctl delif $2_br $2
+brctl addif $1_br $1
+brctl addif $2_br $2
+
+
+
+
+libvirt/qemu/vpc1.xml
+----------------------
+
+    <interface type='bridge'>
+      <mac address='22:54:00:6f:76:4c'/>
+      <source bridge='veth0'/>
+      <target dev='vpc1_eth0'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='22:54:00:cd:74:16'/>
+      <source bridge='vpc1_eth1_br'/>
+      <target dev='vpc1_eth1'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='22:54:00:0f:9d:8a'/>
+      <source bridge='vpc1_eth2_br'/>
+      <target dev='vpc1_eth2'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x09' function='0x0'/>
+    </interface>
