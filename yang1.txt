@@ -1,0 +1,6 @@
+
+
+yang to yin file
+----------------
+
+pyang -f yin -o ietf-yang-types.yin ietf-yang-types.yang
