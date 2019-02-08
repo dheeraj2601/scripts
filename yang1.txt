@@ -4,3 +4,9 @@ yang to yin file
 ----------------
 
 pyang -f yin -o ietf-yang-types.yin ietf-yang-types.yang
+
+
+yang tree
+---------
+
+pyang -f tree ietf-yang-types.yang
