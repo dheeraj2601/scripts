@@ -6,3 +6,15 @@ locate abcd | grep abcd$
 chmod -R 755 dir_name
 
 
+find files occupying max space :
+--------------------------
+for 1 GB :
+du -h -d 1 -t 1G /
+
+To list the top 10 largest files from the current directory:
+du . | sort -nr | head -n10
+
+To list the largest directories from the current directory:
+du -s * | sort -nr | head -n10
+
+
