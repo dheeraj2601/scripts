@@ -18,3 +18,7 @@ To list the largest directories from the current directory:
 du -s * | sort -nr | head -n10
 
 
+
+
+vim /etc/rc.local
+   sudo dhclient eth0
