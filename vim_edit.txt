@@ -58,5 +58,7 @@ The commands zC, zO and zA are similar, but operate on all folding levels
 
 
 
+xmllint --format file_name
+
 
 
