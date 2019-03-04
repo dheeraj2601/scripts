@@ -22,3 +22,7 @@ du -s * | sort -nr | head -n10
 
 vim /etc/rc.local
    sudo dhclient eth0
+   
+   
+vim /etc/resolv.conf
+nameserver x.x.x.x
