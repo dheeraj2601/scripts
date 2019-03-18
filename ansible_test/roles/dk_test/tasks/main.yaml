@@ -1,0 +1,68 @@
+---
+ 
+  - name: Include local variables
+    set_fact:
+      fileLocation: '/opt'
+
+  - name: Creates directory
+    file: 
+      path: /{{ fileLocation }}/dk_test_dir
+      state: directory
+
+  - name: Copy dk_test binary
+    copy:
+      src: ../dk_test_pkg/dk_test
+      dest: /{{ fileLocation }}/dk_test_dir/
+      mode: 0755
+
+  - name: Copy dk_test.config
+    copy:
+      src: ../dk_test_pkg/dk_test.config
+      dest: /{{ fileLocation }}/dk_test_dir/
+
+  - lineinfile:
+      path: /{{ fileLocation }}/dk_test_dir/dk_test.config
+      regexp: '^cassandra_server_ip'
+      line: "cassandra_server_ip = {{ hostvars.cassandra.ansible_host }}"
+
+  - lineinfile:
+      path: /{{ fileLocation }}/dk_test_dir/dk_test.config
+      regexp: '^cassandra_key_space'
+      line: "cassandra_key_space = dk_testnetworks_wan"
+      #line: "cassandra_key_space = dk_testnetworks"
+
+  - name: copy dk_test related libraries
+    copy:
+      src: ../dk_test_pkg/libboost_system.so.1.57.0
+      dest: /{{ fileLocation }}/dk_test_dir/
+
+  - name: copy dk_test related libraries
+    copy:
+      src: ../dk_test_pkg/libboost_thread.so.1.57.0
+      dest: /{{ fileLocation }}/dk_test_dir/
+
+  - name: libraries path
+    shell: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/{{ fileLocation }}/dk_test_dir
+
+  - name: check whether a screen is created for dk_test
+    shell: ps -aef | grep SCREEN | grep dk_test | grep -v grep | wc -l
+    register: flag_dk_test
+
+  - name: copy script to run dk_test on reboot
+    shell: grep -q -F 'gdb -ex run dk_test' /etc/rc.local || echo 'screen -Sdm dk_test bash -c "cd /{{ fileLocation }}/dk_test_dir; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/{{ fileLocation }}/dk_test_dir; gdb -ex run dk_test"' >> /etc/rc.local
+
+  - name: check screen stdout
+    debug: msg="{{flag_dk_test.stdout}}"
+
+  - name: Create dk_test screen
+    shell: screen -dmS dk_test sh
+    when: flag_dk_test.stdout == "0"
+
+  - name: kill dk_test if already running
+    shell: PIDS=$(ps ax | grep -i 'dk_test' | grep 'gdb' | grep -v grep | awk '{print $1}'); if [ -z "$PIDS" ]; then echo "no dk_test running"; else kill -s TERM $PIDS; fi
+
+  - name: run dk_test in gdb 
+    shell: screen -S dk_test -X stuff "cd /{{ fileLocation }}/dk_test_dir; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/{{ fileLocation }}/dk_test_dir; gdb -ex run dk_test
+
+                                   "
+ 

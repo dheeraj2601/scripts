@@ -1,0 +1,13 @@
+[AVWF]
+dk_test1 ansible_host=192.168.122.81
+
+[Cassandra]
+cassandra ansible_host=192.168.122.1
+#cassandra ansible_port=9042
+
+[AVWF:vars]
+ansible_connection=ssh 
+ansible_ssh_user=dheeraj
+ansible_ssh_pass=dk
+ansible_sudo_pass=dk
+#ansible_password=dk

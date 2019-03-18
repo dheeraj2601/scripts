@@ -1,0 +1,6 @@
+- hosts: dk_test1
+  sudo: yes
+  roles:
+    - dk_test     
+
+ 

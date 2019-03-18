@@ -1,0 +1,2 @@
+keyspace: "dk_testnetworks_wan"
+cassandra: "{{ hostvars.cassandra1.ansible_host }}"
