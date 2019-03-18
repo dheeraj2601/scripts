@@ -26,3 +26,7 @@ vim /etc/rc.local
    
 vim /etc/resolv.conf
 nameserver x.x.x.x
+
+
+replace word in directory :
+find ./ -type f -exec sed -i 's/old_word/dk_test/g' {} \;
