@@ -11,5 +11,14 @@ yang tree
 
 pyang -f tree ietf-yang-types.yang
 
-pyang -f tree zebos.yang zebos-bgp.yang cml_data_types.yang
+pyang -f tree zebos.yang
 check for submodule and module . module should be the first file .
+
+
+To html :
+pyang -f jstree openconfig-bgp.yang > bgp_yang.html
+
+To tree :
+pyang -f tree openconfig-bgp.yang > bgp_yang_tree.txt
+
+
