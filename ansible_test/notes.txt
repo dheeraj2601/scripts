@@ -1,6 +1,8 @@
 https://github.com/ansible-network/cisco_ios/blob/devel/README.md
 
 
+apt-get remove --purge ansible
+
 $ sudo apt-get update
 $ sudo apt-get install software-properties-common
 $ sudo apt-add-repository ppa:ansible/ansible
