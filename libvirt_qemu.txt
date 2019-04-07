@@ -1,3 +1,19 @@
+virsh
+define VM1.xml
+
+ip tuntap add name e1 mode tap
+
+
+#For vpc1
+brctl addbr vpc1_eth1_br
+brctl stp vpc1_eth1_br off
+ifconfig vpc1_eth1_br up
+ip tuntap add name 1e1 mode tap
+brctl addif vpc1_eth1_br 1e1
+
+restart VM
+
+
 init
 =====
 
