@@ -4,6 +4,11 @@ comment multiple lines
 :20,56 s/^/#
 
 
+search for exact word
+----------------
+
+/\<your_exact_word\>
+
 
 vimdiff merge
 --------------
