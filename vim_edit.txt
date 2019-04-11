@@ -10,6 +10,24 @@ search for exact word
 /\<your_exact_word\>
 
 
+
+search for a word under the cursor.
+* searches forward for the word,
+# searches backwards.
+
+Simple completion in any text
+CTRL-N once in insert mode and it will try to complete the current word with the first match in the current file. 
+CTRL-P does the same thing but searches backwards.
+
+% key to jump to a matching opening or closing parenthesis, square bracket or a curly brace.
+
+Highlighting all the search pattern matches
+:set hlsearch
+
+To disable the highlighting temporarily, use:
+:nohlsearch
+
+
 vimdiff merge
 --------------
 You can use the following basic commands to merge:
