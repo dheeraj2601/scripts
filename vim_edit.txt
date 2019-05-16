@@ -10,6 +10,9 @@ search for exact word
 /\<your_exact_word\>
 
 
+vimdiff redirect to another file :
+--------------------------------
+export them using :TOhtml. This will place Diff.html in the working directory
 
 search for a word under the cursor.
 * searches forward for the word,
