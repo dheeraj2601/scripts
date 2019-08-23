@@ -30,3 +30,12 @@ nameserver x.x.x.x
 
 replace word in directory :
 find ./ -type f -exec sed -i 's/old_word/dk_test/g' {} \;
+
+// Delete All Files in a Directory Except One or Few Files with Extensions
+shopt -s extglob
+rm -v !("filename")
+rm -v !("filename1"|"filename2") 
+rm -i !(*.zip)
+
+// Once you have all the required commands, turn off the extglob shell option
+shopt -u extglob
