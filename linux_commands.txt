@@ -39,3 +39,13 @@ rm -i !(*.zip)
 
 // Once you have all the required commands, turn off the extglob shell option
 shopt -u extglob
+
+
+
+system info :
+cat /etc/centos-release
+
+uname -a
+
+lsb_release -d
+
