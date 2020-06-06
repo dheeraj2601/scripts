@@ -3,6 +3,20 @@ locate only the given string
 locate abcd | grep abcd$
 
 
+Check if the package is installed :
+dpkg-query -l python*
+dpkg -s python
+
+Check if the package/module is installed in python :
+pip list | grep <module_name_you_want_to_check>
+pip freeze
+python -c "import numpy"
+
+python
+>>help ('modules')
+
+
+
 chmod -R 755 dir_name
 
 
