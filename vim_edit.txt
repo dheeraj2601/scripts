@@ -1,4 +1,15 @@
 
+# Delete all leading blank lines at top of file (only).
+sed '/./,$!d' file
+
+# Delete all trailing blank lines at end of file (only).
+sed -e :a -e '/^\n*$/{$d;N;};/\n$/ba' file
+
+# Delete trailing whitespaces in the file (only).
+sed --in-place 's/[[:space:]]\+$//' file
+
+
+
 comment multiple lines
 -----------------------
 :20,56 s/^/#
