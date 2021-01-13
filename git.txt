@@ -1,3 +1,7 @@
 
 
 git checkout -- filename => undo the changes done but not committed .
+
+
+similar to gitk. Will dump all the changes to the file.
+git log --follow --all -p dir/file.c 
