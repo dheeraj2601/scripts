@@ -1,0 +1,24 @@
+
+
+sudo ip netns add red
+sudo ip link add red-in type veth peer name red-out
+ 
+sudo ip link set red-in netns red
+sudo ip netns exec red ip addr add <VM_IP>/24 dev red-in           // VM ip
+ 
+sudo ip netns exec red ip link set red-in up
+
+sudo ip link add bridge-main type bridge
+ 
+sudo ip addr add <BRIDGE_IP>/24 dev bridge-main                       
+ 
+sudo ip link set red-out master bridge-main
+ 
+sudo ip link set red-out up
+ 
+sudo ip link set bridge-main up
+sudo ip netns exec red ip route add default via <>   =====>>>>>> command displayed nexthop error.       
+sudo ip link add vxlan-red type vxlan id 1000 local <> remote <> dev eth1    // physical interface name
+sudo ip link set vxlan-red master bridge-main
+ 
+sudo ip link set vxlan-red up
